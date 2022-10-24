@@ -4,3 +4,9 @@ body {
 		background-attachment: fixed; /* Фон страницы фиксируется */
 		background-repeat: repeat-x; /* Изображение повторяется по горизонтали */
 }
+
+header {
+  background-color: #000 url(banner.png);
+  text-align:  center;
+  padding: 20px;
+}
