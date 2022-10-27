@@ -5,7 +5,8 @@ import pyjokes
 
 
 inline_btn_1 = InlineKeyboardButton('Первая кнопка!', callback_data='/send')
-inline_kb1 = InlineKeyboardMarkup().add(inline_btn_1)
+inline_btn_2 = InlineKeyboardButton('Вторая кнопка!', callback_data='/rule')
+inline_kb1 = InlineKeyboardMarkup().add(inline_btn_1).add(inline_btn_2)
 
 
 async def handler(message: types.Message):

@@ -1,0 +1,17 @@
+fastapi~=0.85.1
+uvicorn~=0.18.3
+
+#for template
+jinja2
+
+#for static files
+aiofiles
+
+#for database   #new
+sqlalchemy~=1.4.42
+psycopg2
+
+#for loading environment variables  #new
+python-dotenv~=0.21.0
+starlette~=0.20.4
+requests~=2.28.1
