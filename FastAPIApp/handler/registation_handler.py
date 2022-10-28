@@ -1,28 +1,29 @@
-from fastapi import Depends
-from requests import Session
+from urllib import request
 
-from imports import *
-router = APIRouter(include_in_schema=False)
+from fastapi import Request, APIRouter, Form
+from sqlalchemy.orm import sessionmaker
+from starlette.responses import RedirectResponse, HTMLResponse
 
-@router.get("/register/")
-def register(request: Request):
-    return templates.TemplateResponse("users/register.html", {"request": request})
+from config import templates
+from storage.migrate_up import User, engine
+
+registartion = APIRouter()
 
 
-@router.post("/register/")
-async def register(request: Request, db: Session = Depends(get_db)):
-    form = UserCreateForm(request)
-    await form.load_data()
-    if await form.is_valid():
-        user = UserCreate(
-            username=form.username, email=form.email, password=form.password
-        )
-        try:
-            user = create_new_user(user=user, db=db)
-            return responses.RedirectResponse(
-                "/?msg=Successfully-Registered", status_code=status.HTTP_302_FOUND
-            )  # default is post request, to use get request added status code 302
-        except IntegrityError:
-            form.__dict__.get("errors").append("Duplicate username or email")
-            return templates.TemplateResponse("users/register.html", form.__dict__)
-    return templates.TemplateResponse("users/register.html", form.__dict__)
+@registartion.get("/registration")
+def registration(request: Request):
+    return templates.TemplateResponse("registration.html", {"request": request})
+
+
+@registartion.post("/regp", response_class=RedirectResponse, status_code=302)
+def registr(request: Request, user_name: str = Form(), phone: str = Form(), password: str = Form()):
+    if user_name is not None and phone is not None and password is not None:
+        SessionLocal = sessionmaker(autoflush=False, bind=engine)
+        db = SessionLocal()
+        u = User(name=user_name, phone_number=phone, password=password, is_admin_=False)
+        db.add(u)
+        db.commit()
+    return '/set'
+
+
+

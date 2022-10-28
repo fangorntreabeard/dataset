@@ -10,18 +10,18 @@
     </div>
     <table class="reg">
          <tr><td colspan="2"><h1 class="reg-h1"> Регистрация </h1></td></tr>
-      <form  method="POST">
+      <form  action="regp" method="POST">
         <tr>
           <td><label>Username</label></td>
-          <td><input type="text" required class="form-control" name="username" value="{{username}}" placeholder="Введите имя"></td>
+          <td><input type="text" required class="form-control" name="user_name" placeholder="Введите имя"></td>
         </tr>
         <tr>
-          <td><label>Email</label></td>
-          <td><input type="text" required placeholder="Your email" name="email" value="{{email}}" class="form-control"></td>
+          <td><label>Телефон</label></td>
+          <td><input type="text" required placeholder="Телефон" name="phone" class="form-control"></td>
         </tr>
         <tr>
-          <td><label>Password</label></td>
-          <td><input type="password" required placeholder="Введи пароль" value="{{password}}" name="password" class="form-control"></td>
+          <td><label>Пароль</label></td>
+          <td><input type="password" required placeholder="Введи пароль" name="password" class="form-control"></td>
         </tr>
         <tr><td colspan="2"><button type="submit" class="reg-button">Отправить</button></td></tr>
       </form>

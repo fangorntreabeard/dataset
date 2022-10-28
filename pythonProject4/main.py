@@ -1,42 +1,67 @@
-from asyncio import run as r
-from typing import Union
-from tracemalloc import BaseFilter
-from aiogram.utils.callback_data import CallbackData
+import asyncio
+import logging
+from aiogram import Bot, Dispatcher, types
+from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from handler_interface import *
-from aiogram import executor, types
-from pprint import pprint as prp
-import cmd as c
-
-c.dp.register_message_handler(send_message_handler.handler, commands=['start'])
+API_TOKEN = '5377436768:AAHS8GHrfdBZIpv-7ab34qActlrVFV02yXk'
+logging.basicConfig(level=logging.INFO)
+bot = Bot(token=API_TOKEN)
+dp = Dispatcher()
 
 
-class DataFilter(BaseFilter):
-    data: Union[str, list]
+kb = [
+    [types.KeyboardButton(text="С пюрешкой")],
+    [types.KeyboardButton(text="Без пюрешки")]
+]
 
-    async def __call__(self, CallBackQuery: types.CallbackQuery) -> bool:
-        if isinstance(self.data, str):
-            return CallBackQuery.data == self.data
-        else:
-            return CallBackQuery.data in self.data
+buttons = [
+    [
+        types.InlineKeyboardButton(text="1", callback_data="/1"),
+        types.InlineKeyboardButton(text="2", callback_data="/2")
+    ],
+    [types.InlineKeyboardButton(text="3", callback_data="/3")]
+]
 
-
-async def send_on_callback(CallBackQuery: types.CallbackQuery):
-    prp(CallBackQuery)
-    await CallBackQuery.message.answer(CallBackQuery.message.chat.id)
-
-
-async def edit_on_call_back(CallBackQuery: types.CallbackQuery):
-    prp(CallBackQuery)
-    await CallBackQuery.message.edit_text(text='None')
+keyboard_Reply = types.ReplyKeyboardMarkup(keyboard=kb)
+keyword_Inline = types.InlineKeyboardMarkup(inline_keyboard=buttons)
 
 
-c.dp.register_callback_query_handler(send_on_callback, DataFilter)
+buttons1 = [
+    [
+        types.InlineKeyboardButton(text="1", callback_data="/1"),
+        types.InlineKeyboardButton(text="2", callback_data="/2")
+    ],
+]
+
+keyword_Inline2 = types.InlineKeyboardMarkup(inline_keyboard=buttons1)
+
+@dp.message()
+async def message_command_handler(message: types.Message):
+    commands = {
+        '/start': message.answer(message.text, reply_markup=keyword_Inline),
+    }
+    if message.text in commands.keys():
+        await commands[message.text]
+    else:
+        await message.answer('Действие может быть добавлено!')
 
 
-def main():
-    executor.start_polling(c.dp)
+@dp.callback_query()
+async def callback_query_command_handler(query: types.callback_query):
+    commands = {
+        '/1':  [query.answer(query.data)],
+        '/2': [query.message.answer(query.data), query.message.answer(query.data)],
+        "/3": [query.message.edit_text(text='Отредактировано!', reply_markup=keyword_Inline2)]
+    }
+    if query.data in commands.keys():
+        for i in commands[query.data]:
+            await i
+    else:
+        await query.answer('Действие может быть добавлено!')
 
 
-if __name__ == '__main__':
-    main()
+async def main():
+    await dp.start_polling(bot)
+
+if __name__ == "__main__":
+    asyncio.run(main())
