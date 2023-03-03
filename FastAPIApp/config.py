@@ -5,6 +5,7 @@ from starlette.staticfiles import StaticFiles
 import os
 from dotenv import load_dotenv
 from pathlib import Path
+
 parent_dir_path = os.path.dirname(os.path.realpath(__file__))
 env_path = Path('.') / '.env'
 load_dotenv(dotenv_path=env_path)

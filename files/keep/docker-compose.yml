@@ -1,0 +1,10 @@
+version: '3.0'
+
+services:
+  web:
+    build: ./src
+    command: python3 app/main.py
+    volumes:
+      - ./src/:/usr/src/app/
+    ports:
+      - 8002:8080

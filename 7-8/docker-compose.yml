@@ -1,0 +1,13 @@
+version: '3'
+
+networks:
+  default:
+    external:
+      name: general_network_all_services
+
+services:
+  man:
+    build:
+      context: .
+    volumes:
+      - files:files

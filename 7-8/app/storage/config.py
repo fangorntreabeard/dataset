@@ -1,0 +1,1 @@
+CONFIG = ("postgres://admin:1234@localhost:5433/postgres?sslmode=disable", './responses/')
